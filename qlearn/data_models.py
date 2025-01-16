@@ -1,4 +1,4 @@
-from typing import Hashable, Optional
+from typing import Hashable, Optional, Union
 import random
 import json
 from pprint import pprint
@@ -79,7 +79,7 @@ class Environment(ABC):
                 raise RuntimeError(f'State quality {s_q} (which is type {type(s_q)}) is not of environment-defined type {t}')
 
 class QAgent:
-    def __init__(self, environment:Environment, epsilon:float=0.5, alpha:float=1.0,gamma:float=1.0,epsilon_decay=lambda x: x*0.99,alpha_decay=lambda x: x*0.95, name:str='Nameless agent') -> None:
+    def __init__(self, environment:Environment, epsilon:float=0.5, alpha:float=1.0,gamma:float=1.0,epsilon_decay=lambda x: x*0.99,alpha_decay=lambda x: x*0.95, name:str='Nameless agent', decay_after_episodes:Union[int,bool]=1, decay_after_actions:Union[int,bool]=False) -> None:
         self.environment = environment
         self.state = environment.starting_state
         self.epsilon = epsilon
@@ -87,6 +87,11 @@ class QAgent:
         self.gamma = gamma
         self.epsilon_decay = epsilon_decay
         self.alpha_decay = alpha_decay
+        self.decay_after_episodes = decay_after_episodes
+        self.decay_after_actions = decay_after_actions
+
+        self.episode_number = 0
+        self.action_number = 0
 
         self.name = name
 
@@ -116,9 +121,17 @@ class QAgent:
 
         self.q_table.update(self.s_prev, self.a_prev, self.state, r, self.alpha, self.gamma, self.environment.possible_actions)
 
-        self.epsilon = self.epsilon_decay(self.epsilon)
-        self.alpha = self.alpha_decay(self.alpha)
-        
+        self.action_number += 1
+        if self.decay_after_actions and self.action_number > 0 and (self.action_number % int(self.decay_after_actions))==0:
+            self.epsilon = self.epsilon_decay(self.epsilon)
+            self.alpha = self.alpha_decay(self.alpha)
+
+        if self.environment.complete:
+            self.episode_number += 1
+            if self.decay_after_episodes and self.episode_number > 0 and (self.episode_number % int(self.decay_after_episodes))==0:
+                self.epsilon = self.epsilon_decay(self.epsilon)
+                self.alpha = self.alpha_decay(self.alpha)
+
     def save(self):
         self.q_table.save(f"{self.name.replace(' ','')}_qvalues.json")
     

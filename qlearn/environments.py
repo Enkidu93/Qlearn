@@ -1,5 +1,5 @@
 from typing import Optional
-from qlearn.data_models import Environment, Action, State, QAgent
+from .data_models import Environment, Action, State, QAgent
 from numpy import sign
 import random
 class ExampleEnvironment(Environment):
