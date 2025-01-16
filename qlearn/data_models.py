@@ -7,6 +7,8 @@ from abc import ABC, abstractmethod
 class State:
     def __init__(self, qualities: 'tuple[Hashable]') -> None:
         self.qualities = qualities
+    def __eq__(self, value: object) -> bool:
+        return self.qualities == value.qualities
 
 class Action:
     def __init__(self, value:int, name:str='Nameless action', inititalization_value:float=0.0) -> None:
@@ -69,13 +71,12 @@ class Environment(ABC):
         self.complete = False
     
     @abstractmethod
-    def take_action(self, agent, action) -> float:
+    def take_action(self, agent, action) -> 'tuple[State, float]':
         if len(self.quality_definitions) != len(agent.state.qualities):
             raise RuntimeError(f'State qualities of agent differ from environment-defined quality types in number: {len(agent.state.qualities)} vs {len(self.quality_definitions)}')
         for t, s_q in zip(self.quality_definitions, agent.state.qualities):
             if not isinstance(s_q, t):
-                raise RuntimeError(f'State quality {s_q} is not of environment-defined type {t}')
-        pass
+                raise RuntimeError(f'State quality {s_q} (which is type {type(s_q)}) is not of environment-defined type {t}')
 
 class QAgent:
     def __init__(self, environment:Environment, epsilon:float=0.5, alpha:float=1.0,gamma:float=1.0,epsilon_decay=lambda x: x*0.99,alpha_decay=lambda x: x*0.95, name:str='Nameless agent') -> None:
@@ -121,6 +122,9 @@ class QAgent:
     def save(self):
         self.q_table.save(f"{self.name.replace(' ','')}_qvalues.json")
     
-    def load(self):
-        self.q_table.load(f"{self.name.replace(' ','')}_qvalues.json")
+    def load(self, filename=None):
+        if filename is not None:
+            self.q_table.load(filename)
+        else:
+            self.q_table.load(f"{self.name.replace(' ','')}_qvalues.json")
 

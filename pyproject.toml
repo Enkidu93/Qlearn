@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "qlearn"
+version = "0.1.0"
+description = ""
+authors = ["Enkidu93 <lowryec17@gcc.edu>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+tqdm = "^4.67"
+pprintpp = "^0.4"
+matplotlib = "^3.10"
+numpy = "^1.26"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
