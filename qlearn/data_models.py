@@ -46,7 +46,7 @@ class QTable:
         return max([self[s][a] for a in possible_actions])
     
     def action_with_max_q_for(self, s, possible_actions) -> float:
-        random.shuffle(possible_actions)
+        random.shuffle(possible_actions) #TODO make more efficient
         return max(possible_actions, key=lambda a: self[s][a])
     
     def update(self, s_prev, a_prev, s, r, alpha, gamma, possible_actions):
@@ -77,9 +77,16 @@ class Environment(ABC):
         for t, s_q in zip(self.quality_definitions, agent.state.qualities):
             if not isinstance(s_q, t):
                 raise RuntimeError(f'State quality {s_q} (which is type {type(s_q)}) is not of environment-defined type {t}')
+            
+    @abstractmethod
+    def reset(self, agent): #TODO add agent reset method
+        agent.state = self.starting_state
+        agent.total_r = 0
+        self.complete = False
+        agent.action_number = 0
 
 class QAgent:
-    def __init__(self, environment:Environment, epsilon:float=0.5, alpha:float=1.0,gamma:float=1.0,epsilon_decay=lambda x: x*0.99,alpha_decay=lambda x: x*0.95, name:str='Nameless agent', decay_after_episodes:Union[int,bool]=1, decay_after_actions:Union[int,bool]=False) -> None:
+    def __init__(self, environment:Environment, epsilon:float=0.5, alpha:float=1.0,gamma:float=1.0,epsilon_decay=lambda x: x*0.99,alpha_decay=lambda x: x*0.99, name:str='Nameless agent', decay_after_episodes:Union[int,bool]=1, decay_after_actions:Union[int,bool]=False) -> None:
         self.environment = environment
         self.state = environment.starting_state
         self.epsilon = epsilon

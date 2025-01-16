@@ -16,8 +16,11 @@ class ExampleEnvironment(Environment):
             return State(tuple([max(0,agent.state.qualities[0]-1)])), -0.01
         return agent.state, -0.01
     
+    def reset(self, agent: QAgent):
+        return super().reset(agent)
+    
 class GridWorld(Environment):
-    def __init__(self, size:int, quality_definitions='Optional[list[type]]') -> None:
+    def __init__(self, size:int, quality_definitions:Optional[list[type]]=None) -> None:
         if size < 2:
             raise ValueError('Size must be greater than 1')
         super().__init__([Action(0, 'Right'),Action(1, 'Down'),Action(2, 'Left'),Action(3, 'Up')], [int,int] if quality_definitions is None else quality_definitions, State((0,0)))
@@ -39,6 +42,8 @@ class GridWorld(Environment):
             r = 10
             self.complete = True
         return s, r
+    def reset(self, agent: QAgent):
+        super().reset(agent)        
 
 class ChaseGridWorld(GridWorld):
     def __init__(self, size: int) -> None:
@@ -101,4 +106,8 @@ class ChaseGridWorld(GridWorld):
             self.complete = True
         s = State((s.qualities[0], s.qualities[1], int(sign(self.target_state.qualities[0]-s.qualities[0])), int(sign(self.target_state.qualities[1]-s.qualities[1]))))
         return s, r
+    
+    def reset(self, agent):
+        super().reset(agent)
+        self.target_state = self.target_starting_state
         
