@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from qlearn.trainer import QLearnTrainer
 
-environment = GridWorld(25)
-agent = QAgent(environment,name="TestAgentGridWorld", epsilon=1.0, alpha=1.0, epsilon_decay=lambda x: x*0.99994, alpha_decay=lambda x: x*0.999975)
+environment = ChaseGridWorld(25)
+agent = QAgent(environment,name="TestAgentChase25", epsilon=1.0, alpha=1.0, epsilon_decay=lambda x: x*0.99994, alpha_decay=lambda x: x*0.999975)
 trainer = QLearnTrainer(environment, agent)
 
 REPLAY_INTERVAL=5_000

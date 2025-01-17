@@ -13,11 +13,11 @@ class QLearnTrainer:
         game_lengths = []
         if num_actions:
             agent_actions = 0
-            while(True): #TODO refactor to a single loop; move logic to methods
+            while True: #TODO refactor to a single loop; move logic to methods
                 self.environment.reset(self.agent)
                 if self.agent.action_number > 0 or load_preexisting_agent:
                         self.agent.load()
-                while(not self.environment.complete):
+                while not self.environment.complete:
                     game_length = 0
                     if self.agent.action_number > 0:
                         if get_replay_interval is not None and (i % get_replay_interval) == 0:
@@ -41,7 +41,7 @@ class QLearnTrainer:
                 game_length = 0
                 if i > 0 or load_preexisting_agent:
                         self.agent.load()
-                while(not self.environment.complete):
+                while not self.environment.complete:
                     if self.agent.action_number > 0:
                         if get_replay_interval is not None and (i % get_replay_interval) == 0:
                             get_replay(self.agent, self.environment)
@@ -52,6 +52,16 @@ class QLearnTrainer:
                 game_lengths.append(game_length)
         
         return rewards, game_lengths
+    
+    def test(self) -> tuple[float, int]:
+        self.agent.load()
+        self.environment.reset(self.agent)
+        game_length = 0
+        while not self.environment.complete:
+            self.agent.take_action()
+            game_length += 1
+        
+        return self.agent.total_r, game_length
 
 
   
