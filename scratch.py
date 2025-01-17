@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from qlearn.trainer import QLearnTrainer
 
-environment = GridWorld(5)
+environment = GridWorld(25)
 agent = QAgent(environment,name="TestAgentGridWorld", epsilon=1.0, alpha=1.0, epsilon_decay=lambda x: x*0.99994, alpha_decay=lambda x: x*0.999975)
 trainer = QLearnTrainer(environment, agent)
 
@@ -31,9 +31,8 @@ plt.plot(game_lengths)
 plt.show()
 
 for i, replay in enumerate(replays):
-    # print(f"REPLAYING GAME {(i+1)*REPLAY_INTERVAL}")
     fig, ax = plt.subplots()
-    ax.set_title(f"Game = {(i+1)*REPLAY_INTERVAL}")
+    ax.set_title(f"Episode = {(i+1)*REPLAY_INTERVAL}")
     circle = plt.Circle((environment.starting_state.qualities[0], environment.starting_state.qualities[1]),0.5*(environment.size/25),fc='r')
     if 'target_state' in environment.__dict__:
         target = plt.Circle((environment.target_starting_state.qualities[0], environment.target_starting_state.qualities[1]),0.5*(environment.size/25),fc='b')
