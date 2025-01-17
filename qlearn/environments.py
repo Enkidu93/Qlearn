@@ -23,7 +23,7 @@ class GridWorld(Environment):
     def __init__(self, size:int, quality_definitions:Optional[list[type]]=None) -> None:
         if size < 2:
             raise ValueError('Size must be greater than 1')
-        super().__init__([Action(0, 'Right'),Action(1, 'Down'),Action(2, 'Left'),Action(3, 'Up')], [int,int] if quality_definitions is None else quality_definitions, State((0,0)))
+        super().__init__([Action(0, 'Down'),Action(1, 'Left'),Action(2, 'Up'),Action(3, 'Right')], [int,int] if quality_definitions is None else quality_definitions, State((0,0)))
         self.size = size
     def take_action(self, agent:QAgent, action) -> 'tuple[State, float]':
         super().take_action(agent, action)

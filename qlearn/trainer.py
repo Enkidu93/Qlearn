@@ -15,10 +15,11 @@ class QLearnTrainer:
             agent_actions = 0
             while(True): #TODO refactor to a single loop; move logic to methods
                 self.environment.reset(self.agent)
+                if self.agent.action_number > 0 or load_preexisting_agent:
+                        self.agent.load()
                 while(not self.environment.complete):
                     game_length = 0
-                    if i > 0 or load_preexisting_agent:
-                        self.agent.load()
+                    if self.agent.action_number > 0:
                         if get_replay_interval is not None and (i % get_replay_interval) == 0:
                             get_replay(self.agent, self.environment)
                     self.agent.take_action()
@@ -38,9 +39,10 @@ class QLearnTrainer:
             for i in tqdm(range(num_episodes)):
                 self.environment.reset(self.agent)
                 game_length = 0
-                while(not self.environment.complete):
-                    if i > 0 or load_preexisting_agent:
+                if i > 0 or load_preexisting_agent:
                         self.agent.load()
+                while(not self.environment.complete):
+                    if self.agent.action_number > 0:
                         if get_replay_interval is not None and (i % get_replay_interval) == 0:
                             get_replay(self.agent, self.environment)
                     self.agent.take_action()
