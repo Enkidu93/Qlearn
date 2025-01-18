@@ -2,10 +2,12 @@ from typing import Callable, Optional
 
 from tqdm import tqdm
 
-from .data_models import Environment, QAgent
+from .common import Environment, QAgent
 
 
 class QLearnTrainer:
+    """A trainer for QAgents"""
+
     def __init__(self, environment: Environment, agent: QAgent):
         self.environment = environment
         self.agent = agent
@@ -18,6 +20,9 @@ class QLearnTrainer:
         get_replay_interval: Optional[int] = None,
         load_preexisting_agent: bool = False,
     ) -> tuple[list[float], list[int]]:
+        """Trains a QAgent either a number of episodes or a number of actions. Replays may be saved using the get_replay callback.
+
+        Returns the reward per episode and the episode length (i.e., the number of actions taken) per episode"""
         assert bool(num_episodes) ^ bool(
             num_actions
         ), "Exactly one of episodes and num_actions must be set"
@@ -72,6 +77,9 @@ class QLearnTrainer:
         return rewards, episode_lengths
 
     def test(self) -> tuple[float, int]:
+        """Get the reward and episode length for the agent for a single episode in the environment.
+
+        Does not 'learn' and does not overwrite QValues."""
         self.agent.load()
         self.environment.reset(self.agent)
         episode_length = 0

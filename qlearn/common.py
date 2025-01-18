@@ -1,7 +1,6 @@
 import json
 import random
 from abc import ABC, abstractmethod
-from pprint import pprint
 from typing import Hashable, Optional, Union
 
 
@@ -123,6 +122,10 @@ class QAgent:
         decay_after_episodes: Union[int, bool] = 1,
         decay_after_actions: Union[int, bool] = False,
     ) -> None:
+        """A basic Q-learning agent:
+        epsilon - ranges from 0-1; describes the 'exploration' probability of the agent. If 0, then the agent relies entirely on its policy; if 1, its actions are totally random.
+        alpha - ranges from 0-1; learning rate - that is, how much an experienced reward influences the previous state/action pairs value in the policy
+        gamma - ranges from 0-1; the 'discount' factor. Mainly useful in non-episodic contexts. A lower gamma incentivizes the agent to pursue immediate rewards."""
         self.environment = environment
         self.state = environment.starting_state
         self.epsilon = epsilon
@@ -145,6 +148,7 @@ class QAgent:
         self.total_r = 0
 
     def take_action(self, action: Optional[Action] = None):
+        """Take an action with an agent & update the policy; decay epsilon and alpha if applicable"""
         if action is None:
             if random.random() < self.epsilon:
                 action = random.choice(self.environment.possible_actions)

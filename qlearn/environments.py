@@ -3,10 +3,12 @@ from typing import Optional
 
 from numpy import sign
 
-from .data_models import Action, Environment, QAgent, State
+from .common import Action, Environment, QAgent, State
 
 
 class ExampleEnvironment(Environment):
+    """A simple environment. Three adjacent rooms, one agent, rewarded if the agent moves into the 3rd room and uses the 'Get money' action"""
+
     def __init__(self) -> None:
         super().__init__(
             [Action(0, "Get money"), Action(1, "Right"), Action(2, "Left")],
@@ -30,6 +32,8 @@ class ExampleEnvironment(Environment):
 
 
 class GridWorld(Environment):
+    """A single agent attempts to reach a target space in the opposite corner of a grid"""
+
     def __init__(
         self, size: int, quality_definitions: Optional[list[type]] = None
     ) -> None:
@@ -65,6 +69,8 @@ class GridWorld(Environment):
 
 
 class ChaseGridWorld(GridWorld):
+    """A single agent chases a target that moves semi-randomly in a counterclockwise direction"""
+
     def __init__(self, size: int) -> None:
         if size < 4:
             raise ValueError("Size must be greater than 1")
