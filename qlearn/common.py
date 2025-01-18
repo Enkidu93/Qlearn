@@ -74,7 +74,7 @@ class QTable:
     def load(self, filename: str):
         with open(filename, "r") as f:
             data = json.load(f)
-        self._table = {eval(k): ActionTable(table=v) for k, v in data.items()}
+        self._table = {eval(k): ActionTable(table=v) for k, v in data.items()} #TODO unsafe code
 
 
 class Environment(ABC):
