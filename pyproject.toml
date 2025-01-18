@@ -12,6 +12,7 @@ tqdm = "^4.67"
 pprintpp = "^0.4"
 matplotlib = "^3.10"
 numpy = "^1.26"
+isort = "^5.13.2"
 
 
 [build-system]

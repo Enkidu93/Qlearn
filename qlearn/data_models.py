@@ -1,8 +1,8 @@
-from typing import Hashable, Optional, Union
-import random
 import json
-from pprint import pprint
+import random
 from abc import ABC, abstractmethod
+from pprint import pprint
+from typing import Hashable, Optional, Union
 
 
 class State:

@@ -1,7 +1,9 @@
-from typing import Optional
-from .data_models import Environment, Action, State, QAgent
-from numpy import sign
 import random
+from typing import Optional
+
+from numpy import sign
+
+from .data_models import Action, Environment, QAgent, State
 
 
 class ExampleEnvironment(Environment):

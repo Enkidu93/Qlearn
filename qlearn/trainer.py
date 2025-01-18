@@ -1,6 +1,8 @@
 from typing import Callable, Optional
-from .data_models import Environment, QAgent
+
 from tqdm import tqdm
+
+from .data_models import Environment, QAgent
 
 
 class QLearnTrainer:
